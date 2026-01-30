@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+
 const FALLBACK_HOSPITALS = [
   {
     name: "KMC Hospital Mangaluru",
