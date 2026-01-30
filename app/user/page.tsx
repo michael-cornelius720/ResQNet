@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Hospital = {
   name: string;
@@ -11,6 +12,8 @@ type Hospital = {
 
 
 export default function UserPage() {
+  const router = useRouter();
+
   const [emergencyMode, setEmergencyMode] = useState<
     "CRITICAL" | "NORMAL" | null
   >(null);
@@ -29,6 +32,9 @@ export default function UserPage() {
   const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(
     null
   );
+  //dropdown
+  const [showHospitalPicker, setShowHospitalPicker] = useState(false);
+
 
   /* ---------------- SOS HOLD ---------------- */
   const holdTimer = useRef<NodeJS.Timeout | null>(null);
@@ -136,31 +142,41 @@ export default function UserPage() {
 
   /* ---------------- CONTINUE ---------------- */
   const handleContinue = () => {
-    if (!phone) {
-      alert("Please enter phone number");
-      return;
-    }
+  if (!phone) {
+    alert("Please enter phone number");
+    return;
+  }
 
-    let finalHospital = selectedHospital;
+  let finalHospital = selectedHospital;
 
-    // Auto assign for SOS
-    if (emergencyMode === "CRITICAL" && !finalHospital && hospitals.length > 0) {
-      finalHospital = hospitals[0];
-      setSelectedHospital(finalHospital);
-    }
+  // Auto assign for SOS
+  if (emergencyMode === "CRITICAL" && !finalHospital && hospitals.length > 0) {
+    finalHospital = hospitals[0];
+    setSelectedHospital(finalHospital);
+  }
 
-    // Normal case requires selection
-    if (emergencyMode === "NORMAL" && !finalHospital) {
-      alert("Please select a hospital");
-      return;
-    }
+  // Normal case requires selection
+  if (emergencyMode === "NORMAL" && !finalHospital) {
+    alert("Please select a hospital");
+    return;
+  }
 
-    alert(
-      `Emergency Request Sent!\n\nType: ${emergencyMode}\nHospital: ${finalHospital?.name}`
-    );
+  if (!location) {
+    alert("Location not available");
+    return;
+  }
 
-    // NEXT: Send to backend (hospital & police dashboards)
-  };
+  // ✅ Navigate to Emergency Status Page
+  router.push(
+    `/emergency-status?` +
+      `hospital=${encodeURIComponent(finalHospital!.name)}` +
+      `&hLat=${finalHospital!.lat}` +
+      `&hLng=${finalHospital!.lng}` +
+      `&uLat=${location.lat}` +
+      `&uLng=${location.lng}` +
+      `&mode=${emergencyMode}`
+  );
+};
 
   /* ---------------- UI ---------------- */
   return (
@@ -278,32 +294,83 @@ export default function UserPage() {
                 Nearby Hospitals
               </h3>
 
-              <div className="space-y-3">
-  {hospitals.map((h, i) => (
-    <div
-      key={i}
-      onClick={() => setSelectedHospital(h)}
-      className={`p-4 border rounded-lg cursor-pointer ${
-        selectedHospital?.name === h.name
-          ? "border-green-500 bg-green-50"
-          : "border-gray-200 hover:bg-gray-50"
-      }`}
-    >
-      <p className="font-medium">{h.name}</p>
+              {/* ---------------- HOSPITAL DROPDOWN ---------------- */}
+{/* ---------------- HOSPITAL PICKER TRIGGER ---------------- */}
+{hospitals.length > 0 && (
+  <div className="mt-8">
+    
 
-      {h.distance !== undefined && (
-        <p className="text-sm text-gray-500">
-          📍 {h.distance.toFixed(2)} km away
-        </p>
-      )}
-    </div>
-  ))}
-</div>
+    <button
+      onClick={() => setShowHospitalPicker(true)}
+      className="w-full flex justify-between items-center p-4 rounded-xl border bg-white shadow-sm active:scale-[0.98] transition"
+    >
+      <div className="text-left">
+        {selectedHospital ? (
+          <>
+            <p className="font-semibold text-gray-800">
+              {selectedHospital.name}
+            </p>
+            <p className="text-sm text-gray-500">
+              📍 {selectedHospital.distance?.toFixed(2)} km away
+            </p>
+          </>
+        ) : (
+          <p className="text-gray-400">Select a hospital</p>
+        )}
+      </div>
+
+      <span className="text-gray-400 text-xl">⌄</span>
+    </button>
+  </div>
+)}
+
 
             </div>
           </div>
         </div>
       )}
+      {/* ---------------- HOSPITAL PICKER MODAL ---------------- */}
+{showHospitalPicker && (
+  <div className="fixed inset-0 z-50 bg-black/40 flex items-end">
+    <div className="w-full bg-white rounded-t-3xl p-6 max-h-[75vh] overflow-y-auto animate-slideUp">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-lg font-semibold text-gray-800">
+          Select Hospital
+        </h3>
+        <button
+          onClick={() => setShowHospitalPicker(false)}
+          className="text-gray-500 text-xl"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div className="space-y-3">
+        {hospitals.map((h, i) => (
+          <button
+            key={i}
+            onClick={() => {
+              setSelectedHospital(h);
+              setShowHospitalPicker(false);
+            }}
+            className={`w-full text-left p-4 rounded-xl border transition ${
+              selectedHospital?.name === h.name
+                ? "border-green-500 bg-green-50"
+                : "border-gray-200 hover:bg-gray-50"
+            }`}
+          >
+            <p className="font-medium text-gray-800">{h.name}</p>
+            <p className="text-sm text-gray-500 mt-1">
+              🚑 {h.distance?.toFixed(2)} km away
+            </p>
+          </button>
+        ))}
+      </div>
     </div>
+  </div>
+)}
+
+    </div>
+    
   );
 }
