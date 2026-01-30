@@ -12,6 +12,25 @@
     transform: translateY(0);
   }
 }
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+}
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUpFade 0.35s ease-out both;
+}
 
 .animate-slideUp {
   animation: slideUp 0.25s ease-out;
