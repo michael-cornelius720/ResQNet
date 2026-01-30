@@ -6,18 +6,50 @@ import { useState } from "react";
 export default function LoginPage() {
   const router = useRouter();
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      alert("Please fill all fields");
+  const handleHospitalLogin = async () => {
+    if (!username || !password) {
+      setError("Please fill in all fields");
       return;
     }
 
-    // 🔐 Later → connect to DB / Auth
-    alert("Login successful");
-    router.push("/user");
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/auth/hospital/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        // Store hospital session
+        localStorage.setItem("hospital_session", JSON.stringify(data.hospital));
+
+        // Redirect to hospital dashboard
+        router.push("/hospital");
+      } else {
+        setError(data.error || "Login failed");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Network error. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleHospitalLogin();
+    }
   };
 
   return (
@@ -28,16 +60,25 @@ export default function LoginPage() {
           ResQNet
         </h1>
         <p className="text-center text-gray-500 mb-6">
-          Emergency Response Platform
+          Hospital Dashboard Login
         </p>
+
+        {/* ERROR MESSAGE */}
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-600">{error}</p>
+          </div>
+        )}
 
         {/* LOGIN FORM */}
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          placeholder="Hospital Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          onKeyPress={handleKeyPress}
           className="w-full p-3 mb-4 border rounded-lg text-gray-900"
+          disabled={isLoading}
         />
 
         <input
@@ -45,26 +86,26 @@ export default function LoginPage() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyPress={handleKeyPress}
           className="w-full p-3 mb-6 border rounded-lg text-gray-900"
+          disabled={isLoading}
         />
 
         <button
-          onClick={handleLogin}
-          className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold mb-4 hover:bg-blue-700 transition"
+          onClick={handleHospitalLogin}
+          disabled={isLoading}
+          className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold mb-3 hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Login
+          {isLoading ? "Logging in..." : "Login as Hospital"}
         </button>
 
-        {/* SIGNUP */}
-        <p className="text-center text-sm text-gray-500 mb-6">
-          Don’t have an account?{" "}
-          <span
-            onClick={() => router.push("/signup")}
-            className="text-blue-600 font-medium cursor-pointer"
-          >
-            Sign up
-          </span>
-        </p>
+        {/* FORGOT PASSWORD */}
+        <button
+          onClick={() => router.push("/forgot-password")}
+          className="w-full text-sm text-blue-600 hover:text-blue-800 mb-4 transition"
+        >
+          Forgot Password?
+        </button>
 
         {/* DIVIDER */}
         <div className="flex items-center gap-3 mb-6">
@@ -80,6 +121,11 @@ export default function LoginPage() {
         >
           🚨 Emergency SOS (No Login)
         </button>
+
+        {/* INFO */}
+        <p className="text-xs text-gray-500 mt-4 text-center">
+          For hospital staff only. Contact admin for credentials.
+        </p>
       </div>
     </div>
   );

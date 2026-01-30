@@ -11,21 +11,65 @@ export default function SignupPage() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   // Health Details
   const [bloodGroup, setBloodGroup] = useState("");
   const [allergies, setAllergies] = useState("");
   const [medicalConditions, setMedicalConditions] = useState("");
 
-  const handleSignup = () => {
-    if (!name || !phone || !email || !password) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSignup = async () => {
+    // Validation
+    if (!name || !phone || !email || !password || !confirmPassword) {
       alert("Please fill all required fields");
       return;
     }
 
-    // 🔐 Later → save to database
-    alert("Signup successful");
-    router.push("/user");
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          phone,
+          email_id:email,
+          password,
+          bloodGroup,
+          allergies,
+          medicalConditions,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Signup failed");
+      }
+
+      alert("Signup successful! Please check your email to confirm your account.");
+      router.push("/login");
+    } catch (error: any) {
+      console.error("Signup error:", error);
+      alert(error.message || "Signup failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -50,6 +94,7 @@ export default function SignupPage() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="w-full p-3 mb-4 border rounded-lg text-gray-900"
+          disabled={isLoading}
         />
 
         <input
@@ -58,6 +103,7 @@ export default function SignupPage() {
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           className="w-full p-3 mb-4 border rounded-lg text-gray-900"
+          disabled={isLoading}
         />
 
         <input
@@ -66,6 +112,7 @@ export default function SignupPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full p-3 mb-4 border rounded-lg text-gray-900"
+          disabled={isLoading}
         />
 
         <input
@@ -73,7 +120,17 @@ export default function SignupPage() {
           placeholder="Password *"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="w-full p-3 mb-4 border rounded-lg text-gray-900"
+          disabled={isLoading}
+        />
+
+        <input
+          type="password"
+          placeholder="Confirm Password *"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           className="w-full p-3 mb-6 border rounded-lg text-gray-900"
+          disabled={isLoading}
         />
 
         {/* HEALTH DETAILS */}
@@ -85,6 +142,7 @@ export default function SignupPage() {
           value={bloodGroup}
           onChange={(e) => setBloodGroup(e.target.value)}
           className="w-full p-3 mb-4 border rounded-lg text-gray-900"
+          disabled={isLoading}
         >
           <option value="">Select Blood Group</option>
           <option>A+</option>
@@ -103,6 +161,7 @@ export default function SignupPage() {
           value={allergies}
           onChange={(e) => setAllergies(e.target.value)}
           className="w-full p-3 mb-4 border rounded-lg text-gray-900"
+          disabled={isLoading}
         />
 
         <textarea
@@ -110,22 +169,24 @@ export default function SignupPage() {
           value={medicalConditions}
           onChange={(e) => setMedicalConditions(e.target.value)}
           className="w-full p-3 mb-6 border rounded-lg text-gray-900 h-24"
+          disabled={isLoading}
         />
 
         {/* SUBMIT */}
         <button
           onClick={handleSignup}
-          className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition"
+          disabled={isLoading}
+          className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Create Account
+          {isLoading ? "Creating Account..." : "Create Account"}
         </button>
 
         {/* BACK TO LOGIN */}
         <p className="text-center text-sm text-gray-500 mt-6">
           Already have an account?{" "}
           <span
-            onClick={() => router.push("/login")}
-            className="text-blue-600 font-medium cursor-pointer"
+            onClick={() => !isLoading && router.push("/login")}
+            className="text-blue-600 font-medium cursor-pointer hover:underline"
           >
             Login
           </span>
