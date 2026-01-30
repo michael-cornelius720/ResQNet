@@ -135,14 +135,11 @@ const location =
   location: {location ? "OK" : "MISSING"} | hospital: {selectedHospital ? "OK" : "MISSING"}
 </p>
 
-  <a
-  href={`https://www.google.com/maps/dir/?api=1&origin=${location.lat},${location.lng}&destination=${selectedHospital.lat},${selectedHospital.lng}&travelmode=driving`}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="block text-center bg-blue-600 text-white py-3 rounded-lg font-semibold mt-4"
->
-  🚑 Open Route to Hospital
-</a>
+   <iframe
+              className="w-full h-64 rounded-lg mb-3"
+              loading="lazy"
+              src={`https://www.google.com/maps?saddr=${location.lat},${location.lng}&daddr=${selectedHospital.lat},${selectedHospital.lng}&output=embed`}
+            />
 
 
 
