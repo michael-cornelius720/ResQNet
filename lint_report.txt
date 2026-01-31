@@ -1,0 +1,198 @@
+
+> res-q-net@0.1.0 lint
+> eslint
+
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/api/ambulances/route.ts
+   63:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  149:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  192:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  229:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  285:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/api/auth/hospital/forgot-password/route.ts
+  85:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/api/auth/hospital/login/route.ts
+  70:17  warning  'password_hash' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  80:21  error    Unexpected any. Specify a different type            @typescript-eslint/no-explicit-any
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/api/auth/hospital/logout/route.ts
+  3:28  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/api/auth/hospital/reset-password/route.ts
+  101:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/api/auth/signup/route.ts
+   43:14  warning  'e' is defined but never used             @typescript-eslint/no-unused-vars
+  204:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  240:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/api/emergency-notifications/route.ts
+   60:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  123:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/api/emergency/route.ts
+   49:14  warning  'e' is defined but never used             @typescript-eslint/no-unused-vars
+  138:28  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  253:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  353:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  486:23  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  523:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/api/hospitals/manage/route.ts
+    9:27  warning  'request' is defined but never used       @typescript-eslint/no-unused-vars
+   47:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  122:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/api/hospitals/route.ts
+  60:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  65:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  68:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/emergency-status/page.tsx
+   5:61  warning  'MapPin' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    @typescript-eslint/no-unused-vars
+  36:7   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/emergency-status/page.tsx:36:7
+  34 |   useEffect(() => {
+  35 |     if (!emergencyId) {
+> 36 |       setIsLoading(false);
+     |       ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  37 |       return;
+  38 |     }
+  39 |  react-hooks/set-state-in-effect
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/hospital/page.tsx
+  625:91  warning  'HospitalIcon' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  688:5   error    Error: Cannot access variable before it is declared
+
+`fetchEmergencies` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/hospital/page.tsx:688:5
+  686 |     if (!hospitalInfo) return;
+  687 |
+> 688 |     fetchEmergencies();
+      |     ^^^^^^^^^^^^^^^^ `fetchEmergencies` accessed before it is declared
+  689 |     const interval = setInterval(fetchEmergencies, 3000); // Poll every 3 seconds
+  690 |     return () => clearInterval(interval);
+  691 |   }, [hospitalInfo]);
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/hospital/page.tsx:693:3
+  691 |   }, [hospitalInfo]);
+  692 |
+> 693 |   const fetchEmergencies = async () => {
+      |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 694 |     if (!hospitalInfo) return;
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 695 |
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 707 |     }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 708 |   };
+      | ^^^^^ `fetchEmergencies` is declared here
+  709 |
+  710 |   // Fetch ambulances for this hospital
+  711 |   useEffect(() => {  react-hooks/immutability
+  691:6   warning  React Hook useEffect has a missing dependency: 'fetchEmergencies'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-hooks/exhaustive-deps
+  714:5   error    Error: Cannot access variable before it is declared
+
+`fetchAmbulances` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/hospital/page.tsx:714:5
+  712 |     if (!hospitalInfo) return;
+  713 |
+> 714 |     fetchAmbulances();
+      |     ^^^^^^^^^^^^^^^ `fetchAmbulances` accessed before it is declared
+  715 |     const interval = setInterval(fetchAmbulances, 10000);
+  716 |     return () => clearInterval(interval);
+  717 |   }, [hospitalInfo]);
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/hospital/page.tsx:719:3
+  717 |   }, [hospitalInfo]);
+  718 |
+> 719 |   const fetchAmbulances = async () => {
+      |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 720 |     if (!hospitalInfo) return;
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 721 |
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 731 |     }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 732 |   };
+      | ^^^^^ `fetchAmbulances` is declared here
+  733 |
+  734 |   useEffect(() => {
+  735 |     const timer = setInterval(() => {                                   react-hooks/immutability
+  717:6   warning  React Hook useEffect has a missing dependency: 'fetchAmbulances'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              react-hooks/exhaustive-deps
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/police/PoliceMap.tsx
+    9:39  error    Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+  162:11  warning  'hospitalMarker' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  205:11  warning  'routeLine' is assigned a value but never used       @typescript-eslint/no-unused-vars
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/police/page.tsx
+    5:107  warning  'Users' is defined but never used                                                                                    @typescript-eslint/no-unused-vars
+  228:13   warning  'cleanName' is assigned a value but never used                                                                       @typescript-eslint/no-unused-vars
+  271:6    warning  React Hook useEffect has a missing dependency: 'fetchEmergencies'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/signup/page.tsx
+  67:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/sos/page.tsx
+   63:18  error    Unexpected any. Specify a different type                                                                            @typescript-eslint/no-explicit-any
+   67:19  error    Unexpected any. Specify a different type                                                                            @typescript-eslint/no-explicit-any
+   67:27  error    Unexpected any. Specify a different type                                                                            @typescript-eslint/no-explicit-any
+   99:22  error    Unexpected any. Specify a different type                                                                            @typescript-eslint/no-explicit-any
+  169:6   warning  React Hook useEffect has a missing dependency: 'getUserLocation'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/user/page.tsx
+  62:9   error    Error: Cannot access variable before it is declared
+
+`fetchHospitals` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/user/page.tsx:62:9
+  60 |         };
+  61 |         setLocation(loc);
+> 62 |         fetchHospitals(loc.lat, loc.lng);
+     |         ^^^^^^^^^^^^^^ `fetchHospitals` accessed before it is declared
+  63 |       },
+  64 |       () => alert("Location permission required"),
+  65 |       { enableHighAccuracy: true }
+
+/Users/michaelcornelius/Desktop/ResQNet-main/app/user/page.tsx:70:3
+  68 |
+  69 |   /* ---------------- FETCH HOSPITALS ---------------- */
+> 70 |   const fetchHospitals = async (lat: number, lng: number) => {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 71 |     const res = await fetch("/api/hospitals", {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 72 |       method: "POST",
+     …
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 90 |     setHospitals(enriched);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 91 |   };
+     | ^^^^^ `fetchHospitals` is declared here
+  92 |
+  93 |   /* ---------------- SELECT HOSPITAL ---------------- */
+  94 |   const handleHospitalSelect = (index: string) => {  react-hooks/immutability
+  67:6   warning  React Hook useEffect has a missing dependency: 'fetchHospitals'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 react-hooks/exhaustive-deps
+  79:60  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-explicit-any
+
+/Users/michaelcornelius/Desktop/ResQNet-main/middleware.ts
+  4:9  warning  'host' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/michaelcornelius/Desktop/ResQNet-main/scripts/diagnose-password.ts
+  68:22  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 51 problems (33 errors, 18 warnings)
+
