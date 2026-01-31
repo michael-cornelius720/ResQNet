@@ -5,7 +5,7 @@ ResQNet – Smart Emergency Response Network
 CS05TS
 
 # Team Name
-The Information 
+Team Information.
 
 # College Name
 St Aloysius University 
@@ -13,129 +13,160 @@ St Aloysius University
 
 ## Problem Statement
 
-In real-life emergencies such as road accidents, fires, and drowning incidents, victims often face delays in receiving timely medical and rescue assistance. Current systems rely on manual calls, unclear location sharing, and poor coordination between hospitals, police, and rescue services.
+Strengthening emergency medical services to ensure faster response and better care for road accident victims.
 
-These delays during the critical “golden hour” significantly increase fatalities and reduce survival chances.
-
-There is a need for a fast, location-aware, and automated emergency response system that can instantly connect victims with hospitals, ambulances, police, and specialized rescue teams.
 
 ## Proposed Solution
 
-ResQNet is a web-based smart emergency response platform that allows users to trigger an SOS alert instantly without login.
+ResQNet is a full-stack emergency response coordination platform that enables users to trigger an SOS alert instantly without login. The system automatically captures the user’s location, notifies nearby hospitals and police authorities, and dispatches emergency services in real time.
 
-When SOS is pressed:
+## Core Flow
 
-    - User enters phone number
+User triggers SOS
 
-    - Selects emergency type (Accident / Fire / Water)
+GPS captured automatically
 
-    - GPS location is captured automatically
+Phone number + emergency details recorded
 
-    - Nearest hospital is selected or auto-assigned
+Nearby hospitals alerted
 
-    - Hospital receives request and approves
+Hospital accepts and dispatches ambulance
 
-    - Police are notified simultaneously
+Police coordinate traffic and safety
 
-    - Ambulance and rescue services are dispatched
+User tracks live status until resolved
 
-    - Live tracking starts after hospital confirmation
+This ensures faster response, better coordination, and reliable emergency handling.
 
-    - This ensures faster response, better coordination, and reliable emergency handling.
 
 ## Innovation & Creativity
 
-ResQNet introduces several unique improvements over traditional emergency systems:
+ResQNet improves upon traditional emergency systems through:
 
-    - No login or OTP to avoid delay
+Login-free instant SOS activation
 
-    - Multi-emergency support (medical + fire + water rescue)
+Multi-emergency support (medical, fire, water)
 
-    - Automatic GPS capture
+Automatic GPS-based routing
 
-    - Smart nearest hospital allocation
+Smart nearest-hospital allocation
 
-    - Hospital approval-based dispatch (real-world workflow)
+Hospital approval-based dispatch workflow
 
-    - Police-assisted green corridor creation
+Police-assisted green corridor creation
 
-    - Unified dashboard for hospitals and authorities
+Unified dashboards for hospitals and police
 
-    - False SOS prevention mechanisms
+Real-time tracking and notifications
 
-    - Unlike basic SOS apps, ResQNet coordinates multiple agencies simultaneously, not just ambulances
+False SOS prevention mechanisms
+
+Unlike typical SOS apps, ResQNet coordinates multiple agencies simultaneously, not just ambulances.
+
 
 ## Technical Complexity & Stack
 
-### Frontend
-    - Next.js / React
+Frontend
+	
+	Next.js
+	Tailwind CSS
+	Typescript
+	
+Backend
 
-    - Tailwind CSS
+	Next.js
 
-    - TypeScript
+Database
 
-### Backend
-    - Next.js
+	Supabase (PostgreSQL + Realtime)
 
+Maps & Geolocation
 
-### Database
-    - MongoDB
+	OpenStreetMap (Overpass API)
+	Leaflet / React-Leaflet
+	Google Maps Embed
+	Supabase Auth for Hospital & Police
+	Guest access for Citizens
 
-### APIs & Services
-    - Geolocation API (GPS)
+Hosting
 
-    - Maps API (routing & distance calculation)
-
-    - Real-time updates (WebSockets/Firebase)
-
-### Hosting / Deployment
-- Vercel / Render / AWS (optional)
-
+	Vercel
 
 
 ## Usability & Impact
 
-### Users:
-	- General public
+Users:
 
-	- Hospitals
+	Citizens
+	Hospitals
+	Police Departments
+	Fire & Rescue Teams
 
-	- Police departments
+Interaction:
 
-	- Fire & water rescue teams
+	One-tap SOS
+	Minimal manual input
+	Automatic hospital routing
+	Live ambulance tracking
 
+Real-World Impact:
 
-### How They Interact:
-	- One-tap SOS
-
-	- Minimal input
-
-	- Automatic routing
-
-	- Real-time tracking
-
-### Real-World Impact:
-	- Faster ambulance dispatch
-
-	- Reduced emergency response time
-
-	- Better coordination between services
-
-	- Higher survival rate during critical situations
-
-	- Works even for non-technical users
-
+	Reduced emergency response time
+	Faster ambulance dispatch
+	Better multi-agency coordination
+	Improved survival during Golden Hour
+	Accessible to non-technical users
 
 
 ## Setup Instructions
 
-### Prerequisites
-- Node.js installed
-- Git installed
-- Database (MySQL or MongoDB)
+Prerequisites:
 
-### Steps to Run Locally
+	Make sure the following are installed:
+	Node.js (v18 or above)
+	npm or yarn
+	Git
+	Supabase account (for database)
 
-1. Clone the repository:
-```bash
-git clone <your-github-repo-link>
+Clone Repository:
+
+	git clone <your-repository-link>
+	cd resqnet
+
+Install Dependencies:
+
+	npm install
+	(or)
+	yarn install
+
+Environment Variables:
+
+	Create a .env.local file in the root directory:
+	
+	NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+	SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+
+Run Locally:
+
+	npm run dev
+
+Access Application:
+
+	Open your browser:
+	http://localhost:3000
+
+Routes:
+
+	/sos → Citizen portal
+
+	/hospital → Hospital dashboard
+
+	/police → Police dashboard
+
+	/emergency-status → Live tracking
+
+
+Presentation Link:
+
+	https://www.canva.com/design/DAG_6yC17sk/d5o8BPoqBJI5ljUaRjCCrw/edit?utm_content=DAG_6yC17sk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
