@@ -21,7 +21,8 @@ export async function GET(request: NextRequest) {
 
         // Filter by hospital name if provided
         if (hospitalName) {
-            query = query.eq('hospital_name', hospitalName);
+            // Use case-insensitive partial match to handle slight name variations
+            query = query.ilike('hospital_name', `%${hospitalName}%`);
         }
 
         // Filter by status if provided
